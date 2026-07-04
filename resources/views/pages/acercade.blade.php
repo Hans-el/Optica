@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Biblioteca</title>
-</head>
-<body>
+@extends("layouts.app")
 
-    <h1>📚 Nosotros</h1>
+@section("title", ucfirst("nosotros"))
 
-    <p>Esta es una aplicación de ejemplo para aprender Laravel.</p>
+@section("content")
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 capitalize">Nosotros</h1>      
+    </div>
 
-</body>
-</html>
+    <div class="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-400">
+        Vista en construcción — Próximamente verás información sobre nosotros
+    </div>
+@endsection

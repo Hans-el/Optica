@@ -1,19 +1,13 @@
+@extends("layouts.app")
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Biblioteca</title>
-    
-</head>
+@section("title", ucfirst("Inicio"))
 
-<body>
-    
+@section("content")
+    <div class="flex items-center justify-between mb-6">
+        <h1 class="text-3xl font-bold text-gray-900 capitalize">Inicio</h1>      
+    </div>
 
-    <h1>📚 Biblioteca Laravel</h1>
-
-    <h2>Bienvenido {{ $nombre }}</h2>
-
-
-</body>
-</html>
+    <div class="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-400">
+        Vista en construcción — Próximamente verás descuentos y novedades nuevas.
+    </div>
+@endsection

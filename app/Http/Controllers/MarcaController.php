@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\MarcaRequest;
+use App\Models\Marca;
 
 class MarcaController extends Controller
 {
     public function index()
     {
-        // TODO: reemplazar por Marca::all() cuando el modelo esté listo
-        $marcas = [
-            ['id' => 1, 'nombre' => 'Ray-Ban', 'descripcion' => 'Marca clásica de lentes de sol y oftálmicos'],
-            ['id' => 2, 'nombre' => 'Oakley', 'descripcion' => 'Lentes deportivos y de alto rendimiento'],
-            ['id' => 3, 'nombre' => 'Carrera', 'descripcion' => 'Diseño urbano y deportivo'],
-            ['id' => 4, 'nombre' => 'Persol', 'descripcion' => 'Lentes artesanales italianos'],
-        ];
+        $marcas = Marca::withCount('lentes')->orderBy('nombre')->paginate(10);
 
         return view('marcas.index', compact('marcas'));
     }
@@ -24,38 +19,35 @@ class MarcaController extends Controller
         return view('marcas.create');
     }
 
-    public function store(Request $request)
+    public function store(MarcaRequest $request)
     {
-        // TODO: validar y guardar con Marca::create($request->validated())
+        Marca::create($request->validated());
 
         return redirect()->route('marcas.index')->with('success', 'Marca creada correctamente');
     }
 
-    public function show(string $id)
+    public function show(Marca $marca)
     {
-        // TODO: reemplazar por Marca::findOrFail($id)
-        $marca = ['id' => $id, 'nombre' => 'Ray-Ban', 'descripcion' => 'Marca clásica de lentes de sol y oftálmicos'];
+        $marca->loadCount('lentes');
 
         return view('marcas.show', compact('marca'));
     }
 
-    public function edit(string $id)
+    public function edit(Marca $marca)
     {
-        $marca = ['id' => $id, 'nombre' => 'Ray-Ban', 'descripcion' => 'Marca clásica de lentes de sol y oftálmicos'];
-
         return view('marcas.edit', compact('marca'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(MarcaRequest $request, Marca $marca)
     {
-        // TODO: validar y actualizar
+        $marca->update($request->validated());
 
         return redirect()->route('marcas.index')->with('success', 'Marca actualizada correctamente');
     }
 
-    public function destroy(string $id)
+    public function destroy(Marca $marca)
     {
-        // TODO: eliminar registro
+        $marca->delete();
 
         return redirect()->route('marcas.index')->with('success', 'Marca eliminada correctamente');
     }

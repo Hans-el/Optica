@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\UsuarioRequest;
+use App\Models\User;
 
 class UsuarioController extends Controller
 {
     public function index()
     {
-        // TODO: reemplazar por User::all() (o Usuario::all() si usas modelo propio)
-        $usuarios = [
-            ['id' => 1, 'nombre' => 'Admin Principal', 'email' => 'admin@optica.com', 'rol' => 'Administrador'],
-            ['id' => 2, 'nombre' => 'Vendedor 1', 'email' => 'vendedor1@optica.com', 'rol' => 'Vendedor'],
-        ];
+        $usuarios = User::orderBy('name')->paginate(10);
 
         return view('usuarios.index', compact('usuarios'));
     }
@@ -22,32 +19,58 @@ class UsuarioController extends Controller
         return view('usuarios.create');
     }
 
-    public function store(Request $request)
+    public function store(UsuarioRequest $request)
     {
-        return redirect()->route('usuarios.index')->with('success', 'Usuario creado correctamente');
+        $datos = $request->validated();
+        $datos['password'] = bcrypt($datos['password']);
+
+        User::create($datos);
+
+        return redirect()
+            ->route('usuarios.index')
+            ->with('success', 'Usuario creado correctamente');
     }
 
-    public function show(string $id)
+    public function show(User $usuario)
     {
-        $usuario = ['id' => $id, 'nombre' => 'Admin Principal', 'email' => 'admin@optica.com', 'rol' => 'Administrador'];
-
         return view('usuarios.show', compact('usuario'));
     }
 
-    public function edit(string $id)
+    public function edit(User $usuario)
     {
-        $usuario = ['id' => $id, 'nombre' => 'Admin Principal', 'email' => 'admin@optica.com', 'rol' => 'Administrador'];
-
         return view('usuarios.edit', compact('usuario'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(UsuarioRequest $request, User $usuario)
     {
-        return redirect()->route('usuarios.index')->with('success', 'Usuario actualizado correctamente');
+        $datos = $request->validated();
+
+        if (! empty($datos['password'])) {
+            $datos['password'] = bcrypt($datos['password']);
+        } else {
+            unset($datos['password']); // no se toca la contraseña actual
+        }
+
+        $usuario->update($datos);
+
+        return redirect()
+            ->route('usuarios.index')
+            ->with('success', 'Usuario actualizado correctamente');
     }
 
-    public function destroy(string $id)
+    public function destroy(User $usuario)
     {
-        return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado correctamente');
+        // Evita que un usuario se elimine a sí mismo desde el panel
+        if (auth()->id() === $usuario->id) {
+            return redirect()
+                ->route('usuarios.index')
+                ->with('error', 'No puedes eliminar tu propio usuario.');
+        }
+
+        $usuario->delete();
+
+        return redirect()
+            ->route('usuarios.index')
+            ->with('success', 'Usuario eliminado correctamente');
     }
 }

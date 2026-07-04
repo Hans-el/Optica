@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LenteController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\RecetaController;
@@ -33,6 +34,7 @@ Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('c
 Route::resource('lentes', LenteController::class);
 Route::resource('marcas', MarcaController::class);
 Route::resource('categorias', CategoriaController::class);
+Route::resource('proveedores', ProveedorController::class);
 Route::resource('clientes', ClienteController::class);
 Route::resource('ventas', VentaController::class);
 Route::resource('recetas', RecetaController::class);

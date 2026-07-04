@@ -1,15 +1,28 @@
 @extends("layouts.app")
 
-@section("title", ucfirst("categorias"))
+@section("title", "Nueva Categoría")
 
 @section("content")
-    <h1 class="text-3xl font-bold text-gray-900 capitalize mb-6">create - categorias</h1>
 
-    <div class="bg-white rounded-xl border border-gray-100 p-8 text-center text-gray-400">
-        Vista en construcción — mismo patrón que "clientes/create.blade.php".
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Nueva Categoría</h1>
+        <p class="text-sm text-gray-500 mt-1">
+            <a href="{{ route('categorias.index') }}" class="hover:underline">Categorías</a> / Nueva
+        </p>
     </div>
 
-    <a href="{{ route('categorias.index') }}" class="inline-block mt-4 text-sm text-emerald-700 hover:underline">
-        &larr; Volver a categorias
-    </a>
+    <form action="{{ route('categorias.store') }}" method="POST" class="bg-white rounded-xl border border-gray-100 p-6 max-w-lg">
+        @csrf
+        @include("categorias._form")
+
+        <div class="flex items-center gap-3 mt-6">
+            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition">
+                Guardar
+            </button>
+            <a href="{{ route('categorias.index') }}" class="text-sm text-gray-500 hover:text-gray-700">
+                Cancelar
+            </a>
+        </div>
+    </form>
+
 @endsection

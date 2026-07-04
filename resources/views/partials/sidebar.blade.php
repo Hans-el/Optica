@@ -7,6 +7,7 @@
                 ['slug' => 'lentes',        'label' => 'Lentes',       'icon' => 'glasses'],
                 ['slug' => 'marcas',        'label' => 'Marcas',       'icon' => 'star'],
                 ['slug' => 'categorias',    'label' => 'Categorías',   'icon' => 'grid'],
+                ['slug' => 'proveedores',   'label' => 'Proveedores',  'icon' => 'truck'],
                 ['slug' => 'clientes',      'label' => 'Clientes',     'icon' => 'users'],
                 ['slug' => 'ventas',        'label' => 'Ventas',       'icon' => 'card'],
                 ['slug' => 'recetas',       'label' => 'Recetas',      'icon' => 'doc'],
@@ -18,7 +19,7 @@
 
         @foreach ($menu as $item)
             @php $active = request()->routeIs($item['slug'] . '.*') || request()->is($item['slug']); @endphp
-            <a href="{{ url($item['slug']) }}"
+            <a href="{{ route($item['slug'] . '.index') ?? '#' }}"
                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition
                       {{ $active ? 'bg-emerald-50 text-emerald-800' : 'text-gray-600 hover:bg-gray-50' }}">
 
@@ -33,6 +34,9 @@
                             @break
                         @case('grid')
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                            @break
+                        @case('truck')
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8Z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                             @break
                         @case('users')
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -67,7 +71,7 @@
         </svg>
         <p class="mt-2 font-semibold text-gray-800 text-sm">¿Necesitas ayuda?</p>
         <p class="text-xs text-gray-500 mt-1">Estamos para ayudarte</p>
-        <a href="{{ route('contacto')}"
+        <a href="{{ route('contacto') ?? '#' }}"
            class="mt-3 inline-block w-full rounded-lg border border-emerald-600 text-emerald-700 text-xs font-semibold py-2 hover:bg-emerald-100 transition">
             Contactar soporte
         </a>

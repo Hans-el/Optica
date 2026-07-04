@@ -2,52 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\RecetaRequest;
+use App\Models\Cliente;
+use App\Models\Receta;
+use App\Models\User;
 
 class RecetaController extends Controller
 {
     public function index()
     {
-        // TODO: reemplazar por Receta::with('cliente')->all()
-        $recetas = [
-            ['id' => 1, 'cliente' => 'María Gómez', 'medico' => 'Dr. Andrade', 'od' => '-1.25', 'oi' => '-1.00', 'fecha' => '2026-06-20'],
-            ['id' => 2, 'cliente' => 'Carlos Pérez', 'medico' => 'Dra. Vélez', 'od' => '-2.00', 'oi' => '-1.75', 'fecha' => '2026-06-25'],
-        ];
+        $recetas = Receta::with(['cliente', 'optometrista'])
+            ->latest('fecha_examen')
+            ->paginate(10);
 
         return view('recetas.index', compact('recetas'));
     }
 
     public function create()
     {
-        return view('recetas.create');
+        $clientes = Cliente::orderBy('nombre')->get();
+        $optometristas = User::whereIn('rol', ['optometrista', 'administrador'])->orderBy('name')->get();
+
+        return view('recetas.create', compact('clientes', 'optometristas'));
     }
 
-    public function store(Request $request)
+    public function store(RecetaRequest $request)
     {
-        return redirect()->route('recetas.index')->with('success', 'Receta registrada correctamente');
+        Receta::create($request->validated());
+
+        return redirect()
+            ->route('recetas.index')
+            ->with('success', 'Receta registrada correctamente');
     }
 
-    public function show(string $id)
+    public function show(Receta $receta)
     {
-        $receta = ['id' => $id, 'cliente' => 'María Gómez', 'medico' => 'Dr. Andrade', 'od' => '-1.25', 'oi' => '-1.00', 'fecha' => '2026-06-20'];
+        $receta->load(['cliente', 'optometrista']);
 
         return view('recetas.show', compact('receta'));
     }
 
-    public function edit(string $id)
+    public function edit(Receta $receta)
     {
-        $receta = ['id' => $id, 'cliente' => 'María Gómez', 'medico' => 'Dr. Andrade', 'od' => '-1.25', 'oi' => '-1.00', 'fecha' => '2026-06-20'];
+        $clientes = Cliente::orderBy('nombre')->get();
+        $optometristas = User::whereIn('rol', ['optometrista', 'administrador'])->orderBy('name')->get();
 
-        return view('recetas.edit', compact('receta'));
+        return view('recetas.edit', compact('receta', 'clientes', 'optometristas'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(RecetaRequest $request, Receta $receta)
     {
-        return redirect()->route('recetas.index')->with('success', 'Receta actualizada correctamente');
+        $receta->update($request->validated());
+
+        return redirect()
+            ->route('recetas.index')
+            ->with('success', 'Receta actualizada correctamente');
     }
 
-    public function destroy(string $id)
+    public function destroy(Receta $receta)
     {
-        return redirect()->route('recetas.index')->with('success', 'Receta eliminada correctamente');
+        $receta->delete();
+
+        return redirect()
+            ->route('recetas.index')
+            ->with('success', 'Receta eliminada correctamente');
     }
 }

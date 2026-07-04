@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\CategoriaRequest;
+use App\Models\Categoria;
 
 class CategoriaController extends Controller
 {
     public function index()
     {
-        // TODO: reemplazar por Categoria::all()
-        $categorias = [
-            ['id' => 1, 'nombre' => 'Sol', 'descripcion' => 'Lentes de sol'],
-            ['id' => 2, 'nombre' => 'Oftálmicos', 'descripcion' => 'Lentes con graduación'],
-            ['id' => 3, 'nombre' => 'Deportivos', 'descripcion' => 'Lentes para actividad física'],
-        ];
+        $categorias = Categoria::withCount('lentes')->orderBy('nombre')->paginate(10);
 
         return view('categorias.index', compact('categorias'));
     }
@@ -23,32 +19,36 @@ class CategoriaController extends Controller
         return view('categorias.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoriaRequest $request)
     {
+        Categoria::create($request->validated());
+
         return redirect()->route('categorias.index')->with('success', 'Categoría creada correctamente');
     }
 
-    public function show(string $id)
+    public function show(Categoria $categoria)
     {
-        $categoria = ['id' => $id, 'nombre' => 'Sol', 'descripcion' => 'Lentes de sol'];
+        $categoria->loadCount('lentes');
 
         return view('categorias.show', compact('categoria'));
     }
 
-    public function edit(string $id)
+    public function edit(Categoria $categoria)
     {
-        $categoria = ['id' => $id, 'nombre' => 'Sol', 'descripcion' => 'Lentes de sol'];
-
         return view('categorias.edit', compact('categoria'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(CategoriaRequest $request, Categoria $categoria)
     {
+        $categoria->update($request->validated());
+
         return redirect()->route('categorias.index')->with('success', 'Categoría actualizada correctamente');
     }
 
-    public function destroy(string $id)
+    public function destroy(Categoria $categoria)
     {
+        $categoria->delete();
+
         return redirect()->route('categorias.index')->with('success', 'Categoría eliminada correctamente');
     }
 }
