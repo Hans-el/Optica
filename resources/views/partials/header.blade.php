@@ -58,12 +58,30 @@
                 </span>
             </button>
 
-            <a href="{{ route('profile') ?? '#' }}" class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#0F3D2A]">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="8" r="4"/>
-                    <path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>
-                </svg>
-            </a>
+            <details class="relative">
+                <summary class="list-none cursor-pointer w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#0F3D2A]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>
+                    </svg>
+                </summary>
+
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 text-sm text-gray-700 z-40">
+                    <div class="px-4 py-2 border-b border-gray-100">
+                        <p class="font-medium text-gray-900">{{ auth()->user()->name ?? 'Invitado' }}</p>
+                        <p class="text-xs text-gray-400 capitalize">{{ auth()->user()->rol ?? '' }}</p>
+                    </div>
+
+                    <a href="{{ route('profile') }}" class="block px-4 py-2 hover:bg-gray-50">Mi perfil</a>
+
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full text-left px-4 py-2 hover:bg-gray-50 text-red-600">
+                            Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+            </details>
         </div>
     </div>
 </header>

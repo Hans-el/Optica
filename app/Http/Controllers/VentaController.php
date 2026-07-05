@@ -6,7 +6,6 @@ use App\Http\Requests\VentaRequest;
 use App\Models\Cliente;
 use App\Models\Lente;
 use App\Models\Receta;
-use App\Models\User;
 use App\Models\Venta;
 use App\Models\VentaDetalle;
 use Illuminate\Support\Facades\DB;
@@ -74,8 +73,7 @@ class VentaController extends Controller
             $venta = Venta::create([
                 'numero_venta' => 'VT-' . now()->format('Ymd') . '-' . Str::upper(Str::random(5)),
                 'cliente_id' => $request->cliente_id,
-                // TODO: reemplazar por auth()->id() cuando el login esté implementado.
-                'user_id' => auth()->id() ?? User::where('rol', 'administrador')->value('id'),
+                'user_id' => auth()->id(), // ya disponible: el usuario autenticado que registra la venta
                 'receta_id' => $request->receta_id,
                 'fecha_venta' => now(),
                 'subtotal' => $subtotal,

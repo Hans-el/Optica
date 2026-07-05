@@ -97,10 +97,10 @@
                         <input type="number" name="items[__INDEX__][cantidad]" min="1" value="1"
                                class="input-cantidad w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Cant.">
                     </div>
-                    <div class="col-span-3 flex items-center h-[38px] text-sm font-medium text-gray-700 subtotal-linea">
+                    <div class="col-span-3 flex items-center h-9.5 text-sm font-medium text-gray-700 subtotal-linea">
                         $0.00
                     </div>
-                    <div class="col-span-1 flex items-center h-[38px]">
+                    <div class="col-span-1 flex items-center h-9.5">
                         <button type="button" class="btn-quitar-linea text-red-400 hover:text-red-600" aria-label="Quitar línea">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
                         </button>
